@@ -16,5 +16,5 @@ function(ruleList,typeX){ #numeric: 1; categorical: 2s
     if(i>1)ruleExec <- paste(ruleExec, " & ", tmp, sep="")
   }
   #ruleExec <- paste(ruleExec,")",sep="")  
-  return(c(ruleExec))
+  return(c(ruleExec, prediction=ruleList$prediction))
 }

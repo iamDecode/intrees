@@ -3,7 +3,8 @@ function(ruleExec, X, target){
   #typeX = getTypeX(X)
   #ruleExec <- unique(t(sapply(allRulesList,RuleList2Exec,typeX=typeX)))
   #colnames(ruleExec) <- c("len","condition")
-  ruleMetric <- t(sapply(ruleExec[,"condition",drop=FALSE],measureRule,X,target))
+
+  ruleMetric <- t(apply(ruleExec[,c('condition', 'pred')],1,measureRule,X,target))
   rownames(ruleMetric) = NULL; 
   # ruleMetric <- cbind( ruleExec[,1] ,  ruleMetric )
   colnames(ruleMetric) <- c("len","freq","err","condition","pred")

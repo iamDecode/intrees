@@ -9,7 +9,7 @@ function(tree,rowIx,count,ruleSet,rule,levelX,length,max_length)
   if( tree[rowIx,"status"] == -1 | length == max_length ){
     count = count + 1
     ruleSet[[count]] = rule
-    return(list(ruleSet = ruleSet, count=count))
+    return(list(ruleSet = ruleSet, count=count, prediction=tree[rowIx, "prediction"]))
   }
   xIx <- tree[rowIx,"split var"]
   xValue <- tree[rowIx,"split point"]
@@ -61,10 +61,10 @@ function(tree,rowIx,count,ruleSet,rule,levelX,length,max_length)
     }
   
    thisList = treeVisit(tree, tree[rowIx,"left daughter"],count,ruleSet,ruleleft,levelX,length+1,max_length)
-   ruleSet = thisList$ruleSet; count = thisList$count
-   
+   ruleSet = thisList$ruleSet; count = thisList$count; prediction = thisList$prediction;
+
    thisList = treeVisit(tree, tree[rowIx,"right daughter"],count,ruleSet,ruleright,levelX,length+1,max_length)
-   ruleSet = thisList$ruleSet; count = thisList$count
-   
-   return(list(ruleSet = ruleSet, count=count))
+   ruleSet = thisList$ruleSet; count = thisList$count; prediction = thisList$prediction;
+
+   return(list(ruleSet = ruleSet, count=count, prediction=prediction))
 }

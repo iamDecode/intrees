@@ -1,6 +1,7 @@
 measureRule <-
 function(ruleExec,X,target,pred=NULL,regMethod="mean"){
-  len <- length(unlist(strsplit(ruleExec, split=" & ")))
+  if (is.null(pred)){ pred = ruleExec$pred; ruleExec = ruleExec$condition }
+  len <- length(unlist(strsplit(as.character(ruleExec), split=" & ")))
   origRule <- ruleExec
   ruleExec <- paste("which(", ruleExec, ")")
   ixMatch <- eval(parse(text=ruleExec)) 

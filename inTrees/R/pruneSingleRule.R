@@ -3,7 +3,7 @@ function(rule, X, target, maxDecay, typeDecay){
 # typeDecay = 1: relative error increase; otherwise: absolute error increase
 
   #A <- gregexpr("X\\[,[0-9]+\\]", s)
-  newRuleMetric <- measureRule(rule["condition"],X,target)
+  newRuleMetric <- measureRule(data.frame(t(rule[c("condition", "pred")])),X,target)
   errOrig <- as.numeric(newRuleMetric["err"])  
   ruleV <- unlist(strsplit(rule["condition"],split= " & "))
   pred <- rule["pred"]
