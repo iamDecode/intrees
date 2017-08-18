@@ -7,14 +7,15 @@
 #   return(newRuleMetric)
 # }
 
-pruneRule <- function(rules, maxDecay = 0.05){
+pruneRule <- function(rules, X, target, maxDecay = 0.05, typeDecay = 2, liDecay=0.05){
   # newRuleMetric <- NULL
   # for(i in 1:nrow(rules)){
   # 	print(i)
   #   newRuleMetric <- rbind(newRuleMetric, pruneSingleRule(rules[i,],maxDecay))
   # }
+
   newRuleMetric <- apply(rules, 1, function(rule){
-  	return(pruneSingleRule(rule, maxDecay))
+  	return(pruneSingleRule(rule, X, target, maxDecay, typeDecay, liDecay))
   })
 
   newRuleMetric = data.frame(do.call(rbind, newRuleMetric))
