@@ -1,11 +1,16 @@
 selectRuleRRF <-
 function(ruleMetric,X,target){
   ruleI = sapply(ruleMetric[,"condition"],rule2Table,X,target)
-  #coefReg <- 0.95 - 0.05*as.numeric(ruleMetric[,"len"])/max(as.numeric(ruleMetric[,"len"]))
   
+  # ORIGINAL
+  coefReg <- 0.95 - 0.05*as.numeric(ruleMetric[,"len"])/max(as.numeric(ruleMetric[,"len"]))
+  
+  # OLD
   #coefReg <- unlist(lapply(as.numeric(ruleMetric[,"li"]), function(x) { return(max(0,x)); })) / max(as.numeric(ruleMetric[,"li"]))
-  lis = unlist(lapply(as.numeric(ruleMetric[,"li"]), function(x) { return(abs(x)); }))
-  coefReg <- lis / max(lis)
+  
+  # MY VERSION
+  #lis = unlist(lapply(as.numeric(ruleMetric[,"li"]), function(x) { return(abs(x)); }))
+  #coefReg <- lis / max(lis)
   
   rf <- RRF(ruleI,as.factor(target), flagReg = 1, coefReg=coefReg, mtry = (ncol(ruleI)*1/2) , ntree=50, maxnodes= 10,replace=FALSE) 
   imp <- rf$importance/max(rf$importance)
