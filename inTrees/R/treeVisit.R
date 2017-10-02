@@ -1,5 +1,5 @@
 treeVisit <-
-function(tree,rowIx,count,ruleSet,rule,levelX,length,max_length)
+function(tree,rowIx,count,ruleSet,rule,levelX,length,max_length,liSet,ruleLi=list())
 {
   #print(tree[rowIx,"prediction"])
   #print(tree[rowIx,])
@@ -9,7 +9,8 @@ function(tree,rowIx,count,ruleSet,rule,levelX,length,max_length)
   if( tree[rowIx,"status"] == -1 | length == max_length ){
     count = count + 1
     ruleSet[[count]] = rule
-    return(list(ruleSet = ruleSet, count=count))
+    liSet[[count]] = ruleLi
+    return(list(ruleSet = ruleSet, count=count, liSet=liSet))
   }
   xIx <- tree[rowIx,"split var"]
   xValue <- tree[rowIx,"split point"]
@@ -26,27 +27,33 @@ function(tree,rowIx,count,ruleSet,rule,levelX,length,max_length)
   }  
    xValue <- NULL
    ruleleft <- rule
+   ruleLiLeft = ruleLi
    if(length(ruleleft)==0)
    {
      ruleleft[[as.character(xIx)]] <- lValue 
+     ruleLiLeft[[as.character(xIx)]] = tree[tree[rowIx, "left daughter"], "li"]
    }else{
      if(as.character(xIx) %in% ls(ruleleft)) {
           if(!is.null(levelX[[xIx]])){    
             lValue <- intersect(ruleleft[[as.character(xIx)]],lValue)
-            ruleleft[[as.character(xIx)]] <- lValue
+            ruleleft[[as.character(xIx)]] <- lValue 
           }else{
             ruleleft[[as.character(xIx)]] <- paste(ruleleft[[as.character(xIx)]], "&", lValue)
           }
+          ruleLiLeft[[as.character(xIx)]] = ruleLiLeft[[as.character(xIx)]] + tree[tree[rowIx, "left daughter"], "li"]
        }else{
        ruleleft[[as.character(xIx)]] <- lValue
+       ruleLiLeft[[as.character(xIx)]] = tree[tree[rowIx, "left daughter"], "li"] # FIXME: unnecessary repetition
      }
    }
   
    #thisItem = paste("X[,",xIx, "] %in% ", nxValue, sep="")
    ruleright <- rule
+   ruleLiRight = ruleLi
    if(length(ruleright)==0)
    {
      ruleright[[as.character(xIx)]] <- rValue
+     ruleLiRight[[as.character(xIx)]] = tree[tree[rowIx, "right daughter"], "li"]
    }else{
      if(as.character(xIx) %in% ls(ruleright)) {
          if(!is.null(levelX[[xIx]])){  
@@ -55,16 +62,20 @@ function(tree,rowIx,count,ruleSet,rule,levelX,length,max_length)
          }else{
            ruleright[[as.character(xIx)]] <- paste(ruleright[[as.character(xIx)]], "&", rValue)
          }
+         ruleLiRight[[as.character(xIx)]] = ruleLiRight[[as.character(xIx)]] + tree[tree[rowIx, "right daughter"], "li"]
      }else{
         ruleright[[as.character(xIx)]] <- rValue
+        ruleLiRight[[as.character(xIx)]] = tree[tree[rowIx, "right daughter"], "li"] # FIXME: unnecessary repetition
      }
     }
   
-   thisList = treeVisit(tree, tree[rowIx,"left daughter"],count,ruleSet,ruleleft,levelX,length+1,max_length)
-   ruleSet = thisList$ruleSet; count = thisList$count
    
-   thisList = treeVisit(tree, tree[rowIx,"right daughter"],count,ruleSet,ruleright,levelX,length+1,max_length)
-   ruleSet = thisList$ruleSet; count = thisList$count
+   thisList = treeVisit(tree, tree[rowIx,"left daughter"],count,ruleSet,ruleleft,levelX,length+1,max_length,liSet,ruleLiLeft)
+   ruleSet = thisList$ruleSet; count = thisList$count; liSet = thisList$liSet;
+
    
-   return(list(ruleSet = ruleSet, count=count))
+   thisList = treeVisit(tree, tree[rowIx,"right daughter"],count,ruleSet,ruleright,levelX,length+1,max_length,liSet,ruleLiRight)
+   ruleSet = thisList$ruleSet; count = thisList$count; liSet = thisList$liSet;
+
+   return(list(ruleSet = ruleSet, count=count, liSet=liSet))
 }

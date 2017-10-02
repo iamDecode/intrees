@@ -4,5 +4,8 @@ function(rules,X,target, maxDecay = 0.05, typeDecay = 2){
   for(i in 1:nrow(rules)){
     newRuleMetric <- rbind(newRuleMetric, pruneSingleRule(rules[i,],X,target, maxDecay, typeDecay))
   }
+
+  newRuleMetric = cbind(newRuleMetric, li=rules[, "li"]) # CUSTOM
+  
   return(newRuleMetric)
 }

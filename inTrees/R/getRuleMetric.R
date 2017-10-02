@@ -7,7 +7,8 @@ function(ruleExec, X, target){
   rownames(ruleMetric) = NULL; 
   # ruleMetric <- cbind( ruleExec[,1] ,  ruleMetric )
   colnames(ruleMetric) <- c("len","freq","err","condition","pred")
-  dIx <- which(ruleMetric[,"len"]=="-1") 
+  ruleMetric = cbind(ruleMetric, li=ruleExec[, "li"]) # CUSTOM
+  dIx <- which(ruleMetric[,"len"]=="-1" | ruleMetric[,"li"]=="0") 
   if(length(dIx)>0){
    ruleMetric <- ruleMetric[-dIx,]
    print(paste( length(dIx)," paths are ignored.",sep=""))
