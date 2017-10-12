@@ -30,7 +30,7 @@ function(treeList,X,li,ntree=100,maxdepth=6,random=FALSE){
 	cat(paste(length(allRulesList$ruleSet)," rules (length<=",  
 	max_length, ") were extracted from the first ", ntree," trees.","\n",sep=""))
 
-	return(allRulesList)
-	#rulesExec <- ruleList2Exec(X,allRulesList)
-	#return(rulesExec)
+	#return(allRulesList)
+	rulesExec <- ruleList2Exec(X,allRulesList)
+	return(rulesExec)
 }

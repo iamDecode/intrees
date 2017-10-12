@@ -40,7 +40,7 @@ function(tree,rowIx,count,ruleSet,rule,levelX,length,max_length,liSet,ruleLi=lis
           }else{
             ruleleft[[as.character(xIx)]] <- paste(ruleleft[[as.character(xIx)]], "&", lValue)
           }
-          ruleLiLeft[[as.character(xIx)]] = ruleLiLeft[[as.character(xIx)]] + tree[tree[rowIx, "left daughter"], "li"]
+          ruleLiLeft[[as.character(xIx)]] = unlist(c(ruleLiLeft[[as.character(xIx)]], tree[tree[rowIx, "left daughter"], "li"]))
        }else{
        ruleleft[[as.character(xIx)]] <- lValue
        ruleLiLeft[[as.character(xIx)]] = tree[tree[rowIx, "left daughter"], "li"] # FIXME: unnecessary repetition
@@ -62,7 +62,7 @@ function(tree,rowIx,count,ruleSet,rule,levelX,length,max_length,liSet,ruleLi=lis
          }else{
            ruleright[[as.character(xIx)]] <- paste(ruleright[[as.character(xIx)]], "&", rValue)
          }
-         ruleLiRight[[as.character(xIx)]] = ruleLiRight[[as.character(xIx)]] + tree[tree[rowIx, "right daughter"], "li"]
+         ruleLiRight[[as.character(xIx)]] = unlist(c(ruleLiRight[[as.character(xIx)]], tree[tree[rowIx, "right daughter"], "li"]))
      }else{
         ruleright[[as.character(xIx)]] <- rValue
         ruleLiRight[[as.character(xIx)]] = tree[tree[rowIx, "right daughter"], "li"] # FIXME: unnecessary repetition
